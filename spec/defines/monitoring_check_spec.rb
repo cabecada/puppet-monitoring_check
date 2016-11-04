@@ -9,7 +9,7 @@ describe 'monitoring_check' do
     } }
     let(:title) { 'examplecheck' }
     let(:hiera_data) {{ :'sensu_handlers::teams' => { } }}
-    let(:facts) { { :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2' } }
+    let(:facts) { { :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2', :env_short => 'prod', :region_short => 'sc' } }
 
     let(:default_interval) { 60 }
     let(:params) { {:command => 'bar', :runbook => 'http://gronk', :page => true} }
@@ -26,7 +26,7 @@ describe 'monitoring_check' do
     } }
     let(:title) { 'examplecheck' }
     let(:hiera_data) {{ :'sensu_handlers::teams' => { 'operations' => {}, 'other' => {}} }}
-    let(:facts) { { :habitat => 'somehabitat', :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2' } }
+    let(:facts) { { :habitat => 'somehabitat', :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2', :env_short => 'prod', :region_short => 'sc' } }
 
     let(:default_interval) { 60 }
 
@@ -53,6 +53,7 @@ describe 'monitoring_check' do
             "tip"                => false,
             "habitat"            => "somehabitat",
             "tags"               => [],
+            "region"             => "prod-sc",
           })
       end
       it { should contain_file('/etc/sensu/team_data.json').with_content(/other/) }
@@ -123,6 +124,7 @@ describe 'monitoring_check' do
         "notification_email" => "undef",
         "habitat"            => "somehabitat",
         "tags"               => [],
+        "region"             => "prod-sc",
       })
       }
     end
@@ -155,6 +157,7 @@ describe 'monitoring_check' do
           "notification_email" => "undef",
           "habitat"            => "somehabitat",
           "tags"               => [],
+          "region"             => "prod-sc",
         }
       )}
     end
@@ -175,6 +178,7 @@ describe 'monitoring_check' do
         "notification_email" => "undef",
         "habitat"            => "somehabitat",
         "tags"               => [],
+        "region"             => "prod-sc",
         }
       )}
     end
@@ -195,6 +199,7 @@ describe 'monitoring_check' do
           "notification_email" => "undef",
           "habitat"            => "somehabitat",
           "tags"               => [],
+          "region"             => "prod-sc",
         }
       )}
     end
@@ -215,6 +220,7 @@ describe 'monitoring_check' do
           "notification_email" => "undef",
           "habitat"            => "somehabitat",
           "tags"               => [],
+          "region"             => "prod-sc",
         }
       )}
     end
@@ -249,7 +255,7 @@ describe 'monitoring_check' do
     end
 
     context "with override_sensu_checks_to set and can_override true" do
-      let(:facts) { { :habitat => "somehabitat", :override_sensu_checks_to => 'custom@override', :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2' } }
+      let(:facts) { { :habitat => "somehabitat", :override_sensu_checks_to => 'custom@override', :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2', :env_short => 'prod', :region_short => 'sc' } }
       let(:params) { {:command => 'bar', :runbook => 'http://gronk' } }
       it { should contain_sensu__check('examplecheck').with_custom({
         "runbook"            => "http://gronk",
@@ -265,11 +271,12 @@ describe 'monitoring_check' do
         "notification_email" => "custom@override",
         "habitat"            => "somehabitat",
         "tags"               => [],
+        "region"             => "prod-sc",
         }
       )}
     end
     context "with override_sensu_checks_to set and can_override false" do
-      let(:facts) { { :habitat => "somehabitat", :override_sensu_checks_to => 'custom@override', :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2' } }
+      let(:facts) { { :habitat => "somehabitat", :override_sensu_checks_to => 'custom@override', :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2', :env_short => 'prod', :region_short => 'sc' } }
       let(:params) { {:command => 'bar', :runbook => 'http://gronk', :can_override => false } }
       it { should contain_sensu__check('examplecheck').with_custom({
         "runbook"            => "http://gronk",
@@ -285,11 +292,12 @@ describe 'monitoring_check' do
         "notification_email" => "undef",
         "habitat"            => "somehabitat",
         "tags"               => [],
+        "region"             => "prod-sc",
         }
       )}
     end
     context "with a source" do
-      let(:facts) { { :habitat => "somehabitat", :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2' } }
+      let(:facts) { { :habitat => "somehabitat", :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2', :env_short => 'prod', :region_short => 'sc' } }
       let(:params) { {:command => 'bar', :runbook => 'http://gronk', :source => 'mysource' } }
       it { should contain_sensu__check('examplecheck').with_custom({
         "runbook"            => "http://gronk",
@@ -305,11 +313,12 @@ describe 'monitoring_check' do
         "notification_email" => "undef",
         "habitat"            => "somehabitat",
         "tags"               => [],
+        "region"             => "prod-sc",
         }
       ).with_source('mysource') }
     end
     context "with tags" do
-      let(:facts) { { :habitat => "somehabitat", :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2' } }
+      let(:facts) { { :habitat => "somehabitat", :lsbdistid => 'Ubuntu', :osfamily => 'Debian', :lsbdistcodename => 'lucid', :operatingsystem => 'Ubuntu', :ipaddress => '127.0.0.1', :puppetversion => '3.6.2', :env_short => 'prod', :region_short => 'sc' } }
       let(:params) { {:command => 'bar', :runbook => 'http://gronk', :tags => ['first_tag', 'second_tag'] } }
       it { should contain_sensu__check('examplecheck').with_custom({
         "runbook"            => "http://gronk",
@@ -325,6 +334,7 @@ describe 'monitoring_check' do
         "notification_email" => "undef",
         "habitat"            => "somehabitat",
         "tags"               => ['first_tag','second_tag'],
+        "region"             => "prod-sc",
         }
       )}
     end

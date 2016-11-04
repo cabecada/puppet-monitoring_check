@@ -250,6 +250,7 @@ define monitoring_check (
     tip                => $tip,
     habitat            => $::habitat,
     tags               => $tags,
+    region             => "${::env_short}-${::region_short}",
   }
   if getvar('::override_sensu_checks_to') and $can_override {
     $with_override = merge($base_dict, {
